@@ -51,7 +51,7 @@ const NavBar: React.FC = () => {
               </button>
             </div>
             <div className="ml-4 flex items-center text-sm text-gray-600">
-              <MapPin className="w-5 h-5 mr-1 text-[#2874f0]" /> {location}
+              {/* <MapPin className="w-5 h-5 mr-1 text-[#2874f0]" /> {location} */}
             </div>
           </div>
 
