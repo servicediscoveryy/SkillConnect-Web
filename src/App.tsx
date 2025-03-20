@@ -4,13 +4,16 @@ import NavBar from "./components/Navbar/NavBar";
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <div className="flex-grow">
-        {<NavBar />}
-        <AppRoutes />
-
+    <div className="min-h-screen flex flex-col bg-gray-100">
+      <div className="">
+        <NavBar />
       </div>
-        {/* {<Footer />} */}
+      <div className="container mx-auto">
+        <AppRoutes />
+      </div>
+      <div>
+        <Footer />
+      </div>
     </div>
   );
 }
