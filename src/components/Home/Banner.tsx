@@ -23,19 +23,22 @@ const Banner = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-[400px] overflow-hidden bg-gray-100 my-3">
+    <div className="relative w-full h-[250px] overflow-hidden bg-gray-100 my-3">
       {/* Banner Images */}
       <div
         className="flex transition-transform duration-500 ease-out h-full"
         style={{ transform: `translateX(-${currentSlide * 100}%)` }}
       >
         {banners.map((banner) => (
-          <div key={banner.id} className="min-w-full h-full relative">
+          <div
+            key={banner.id}
+            className="min-w-full h-full relative aspect-[1/2]"
+          >
             <a href={banner.link} className="block w-full h-full">
               <img
                 src={banner.imageUrl}
                 alt={banner.alt}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover aspect-[1/2]"
               />
             </a>
           </div>

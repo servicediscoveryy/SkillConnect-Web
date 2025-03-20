@@ -13,7 +13,7 @@ const Category = () => {
             alt={category.category}
             className="w-20 h-20 object-contain rounded-full"
           />
-          <p className="text-sm font-medium mt-2">{category.category}</p>
+          <p className="text font-medium mt-2">{category.category}</p>
         </div>
       ))}
     </div>

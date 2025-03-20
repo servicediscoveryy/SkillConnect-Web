@@ -5,6 +5,7 @@ import data from "../../constant/data/categoryWiseSerivces.json";
 import PopularArea from "../../components/Home/PopularArea";
 import Category from "../../components/Home/Category";
 import Banner from "../../components/Home/Banner";
+import TopServices from "../../components/Home/TopServices";
 
 const Home = () => {
   return (
@@ -13,7 +14,7 @@ const Home = () => {
       <Category />
       <Banner />
       <div>Recommendtaion</div>
-      <div>top service</div>
+      <TopServices />
       <PopularArea />
       <CategoryWiseServices data={data.data} />
       <ServicesList />

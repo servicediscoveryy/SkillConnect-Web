@@ -17,6 +17,8 @@ import {
   Briefcase,
 } from "lucide-react";
 import { FaStar } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+import { generateSlug } from "../../utils/slug";
 
 interface ServiceData {
   _id: string;
@@ -66,40 +68,50 @@ export const SimpleVerticalCard: React.FC<{ service: ServiceData }> = ({
 
 export const ElegantVerticalCard: React.FC<{ service: ServiceData }> = ({
   service,
-}) => (
-  <div className="bg-white rounded-xl overflow-hidden shadow-lg group">
-    <div className="relative">
-      <img
-        src={
-          service.image[0] ||
-          "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800"
-        }
-        alt={service.title}
-        className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
-      />
-      <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
-        <span className="text-gray-900 font-semibold">₹{service.price}</span>
+}) => {
+  const navigate = useNavigate();
+  return (
+    <div
+      className="bg-white rounded-xl overflow-hidden shadow-lg group cursor-pointer"
+      onClick={() => navigate(`/${service._id}/${generateSlug(service.title)}`)}
+    >
+      <div className="relative">
+        <img
+          src={
+            service.image[0] ||
+            "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800"
+          }
+          alt={service.title}
+          className="w-full h-56 object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full">
+          <span className="text-gray-900 font-semibold">₹{service.price}</span>
+        </div>
       </div>
-    </div>
-    <div className="p-6">
-      {/* <div className="flex items-center gap-2 mb-3">
+      <div className="p-6">
+        {/* <div className="flex items-center gap-2 mb-3">
         <Award className="text-blue-500" size={18} />
         <span className="text-sm font-medium text-blue-600">
           {service.category.category}
         </span>
       </div> */}
-      <h3 className="text-xl font-bold mb-2">{service.title}</h3>
-      <p className="text-gray-600 mb-4 line-clamp-2">{service.description}</p>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Star className="text-yellow-400" size={16} fill="currentColor" />
-          <span>{service.avgRating || "New"}</span>
+        <h3 className="text-xl font-bold mb-2">{service.title}</h3>
+        <p className="text-gray-600 text mb-4 line-clamp-2">
+          {service.description}
+        </p>
+        <div className="flex items-center justify-between text">
+          <div className="flex items-center gap-2">
+            <Star className="text-yellow-400" size={16} fill="currentColor" />
+            <span>{service.avgRating || "New"}</span>
+          </div>
+          <button className=" px-4 py-2 rounded-lg hover-effect ">
+            Add Now
+          </button>
         </div>
-        <button className=" px-4 py-2 rounded-lg hover-effect ">Add Now</button>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 export const ModernVerticalCard: React.FC<{ service: ServiceData }> = ({
   service,
@@ -608,12 +620,9 @@ export const ImageRating: React.FC<{ service: ImageRatingData }> = ({
             e.currentTarget.src = "https://via.placeholder.com/150"; // Fallback image
           }}
         />
-
         <div className="absolute bottom-3 flex items-center justify-between w-full px-2">
-          <p className="text-sm sm:text-base font-semibold mt-2 ">
-            {service.title}
-          </p>
-          <div className="bg-black/40 text-white text-xs sm:text-sm rounded-lg px-2 py-1 flex items-center gap-1">
+          <p className="text font-semibold mt-2 ">{service.title}</p>
+          <div className="bg-black/40 text-white text rounded-lg px-2 py-1 flex items-center gap-1">
             <FaStar className="text-yellow-400" /> {service.avgRating}
           </div>
         </div>

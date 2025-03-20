@@ -8,7 +8,7 @@ function App() {
       <div className="">
         <NavBar />
       </div>
-      <div className="container mx-auto">
+      <div className="container mx-auto px-2">
         <AppRoutes />
       </div>
       <div>

@@ -61,9 +61,7 @@ const CategoryWiseServices: React.FC<CategoryWiseServicesProps> = ({
 
   return (
     <div className="my-2">
-      <h1 className="text-3xl font-bold text-gray-900 mb-8 text-center">
-        Services by Category
-      </h1>
+      <h1 className="title my-3 text-center">Our Service Categories</h1>
 
       <div className="space-y-3">
         {data.map((category) => (
@@ -76,9 +74,7 @@ const CategoryWiseServices: React.FC<CategoryWiseServicesProps> = ({
                 {getCategoryIcon(category.category)}
               </div>
               <div className="w-full flex items-center justify-between">
-                <h2 className="text-2xl font-semibold text-gray-900 capitalize">
-                  {category.category}
-                </h2>
+                <h2 className="subTitle ">{category.category}</h2>
                 <h2 className="hover-effect px-2 py-2">See All</h2>
               </div>
             </div>
