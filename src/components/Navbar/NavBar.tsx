@@ -9,11 +9,23 @@ import {
 } from "lucide-react";
 import Logo from "../../assets/logo/Logo.png";
 import { motion, AnimatePresence } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 const NavBar: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [location, setLocation] = useState("Fetching location...");
+  const [searchResult, setSearchResult] = useState<string[]>([]);
+  const [query, setQuery] = useState("");
+  const navigate = useNavigate();
 
+  // Prevent infinite re-renders
+  useEffect(() => {
+    if (searchResult.length === 0) {
+      setSearchResult((prev) => [...prev, "1"]);
+    }
+  }, [searchResult]);
+
+  // Fetch User Location
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -39,10 +51,11 @@ const NavBar: React.FC = () => {
           </a>
 
           {/* Search Bar & Location */}
-          <div className="hidden md:flex flex-1 max-w-2xl mx-4 items-center">
+          <div className="hidden md:flex flex-1 max-w-2xl mx-4 items-center relative">
             <div className="flex w-full bg-white rounded-md border focus-within:ring-2 focus-within:ring-blue-400">
               <input
                 type="text"
+                onChange={(e) => setQuery(e.target.value)}
                 placeholder="Search for products, brands and more"
                 className="w-full px-4 py-2 text-sm text-gray-700 outline-none rounded-l-md"
               />
@@ -50,14 +63,23 @@ const NavBar: React.FC = () => {
                 <Search className="w-5 h-5" />
               </button>
             </div>
-            <div className="ml-4 flex items-center text-sm text-gray-600">
-              {/* <MapPin className="w-5 h-5 mr-1 text-[#2874f0]" /> {location} */}
-            </div>
+            {searchResult.length > 0 && query !== "" && (
+              <div className="absolute bg-white w-full shadow-xl top-10 rounded-lg px-3">
+                <div className="flex items-center px-4 py-2 border-b">
+                  <Search className="w-4 h-4 mr-2" /> tushar shitole
+                </div>
+                <div className="px-4 py-2 border-b">hello how are</div>
+                <div className="px-4 py-2">sangam mundhe</div>
+              </div>
+            )}
           </div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
-            <button className="text-[#2874f0] font-medium text-sm hover:underline">
+            <button
+              className="button  px-2 py-1 font-bold text-sm hover:underline"
+              onClick={() => navigate("/login")}
+            >
               Login
             </button>
             <a
@@ -66,12 +88,11 @@ const NavBar: React.FC = () => {
             >
               Register As Provider
             </a>
-            <div className="relative group">
+            {/* <div className="relative group">
               <button className="flex items-center text-sm font-medium hover:text-blue-600">
-                More
-                <ChevronDown className="w-4 h-4 ml-1" />
+                More <ChevronDown className="w-4 h-4 ml-1" />
               </button>
-            </div>
+            </div> */}
             <a
               href="/cart"
               className="flex items-center text-sm font-medium hover:text-blue-600"
@@ -94,10 +115,11 @@ const NavBar: React.FC = () => {
           </button>
         </div>
 
-        {/* Mobile Search Bar with Location */}
-        <div className="md:hidden py-2">
+        {/* Mobile Search Bar */}
+        <div className="md:hidden py-2 relative">
           <div className="flex w-full bg-white rounded-md border focus-within:ring-2 focus-within:ring-blue-400">
             <input
+              onChange={(e) => setQuery(e.target.value)}
               type="text"
               placeholder="Search for products, brands and more"
               className="w-full px-4 py-2 text-sm text-gray-700 outline-none rounded-l-md"
@@ -106,6 +128,19 @@ const NavBar: React.FC = () => {
               <Search className="w-5 h-5" />
             </button>
           </div>
+
+          {/* Search Results */}
+          {searchResult.length > 0 && query !== "" && (
+            <div className="absolute bg-white w-full shadow-xl mt-2">
+              <div className="flex items-center px-4 py-2 border-b">
+                <Search className="w-4 h-4 mr-2" /> tushar shitole
+              </div>
+              <div className="px-4 py-2 border-b">hello how are</div>
+              <div className="px-4 py-2">sangam mundhe</div>
+            </div>
+          )}
+
+          {/* Location */}
           <div className="text-sm text-gray-600 flex items-center mt-2">
             <MapPin className="w-5 h-5 mr-1 text-[#2874f0]" /> {location}
           </div>

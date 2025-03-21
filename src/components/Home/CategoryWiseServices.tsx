@@ -1,6 +1,7 @@
 import React from "react";
 import { Wrench, Zap, ChefHat, Wind, Hammer } from "lucide-react";
 import { ElegantVerticalCard } from "../Cards/ServiceCards";
+import { useNavigate } from "react-router-dom";
 
 interface ServiceData {
   _id: string;
@@ -58,6 +59,7 @@ const CategoryWiseServices: React.FC<CategoryWiseServicesProps> = ({
       </div>
     );
   }
+  const navigate = useNavigate();
 
   return (
     <div className="my-2">
@@ -70,12 +72,17 @@ const CategoryWiseServices: React.FC<CategoryWiseServicesProps> = ({
             className="bg-white rounded-2xl shadow-sm p-6 w-full"
           >
             <div className="flex items-center gap-3 mb-6">
-              <div className="p-2 bg-blue-100 rounded-lg text-blue-600">
+              <div className="p-2 bg-gray-100 rounded-lg text">
                 {getCategoryIcon(category.category)}
               </div>
               <div className="w-full flex items-center justify-between">
                 <h2 className="subTitle ">{category.category}</h2>
-                <h2 className="hover-effect px-2 py-2">See All</h2>
+                <h2
+                  className="hover-effect text px-2 py-2 cursor-pointer"
+                  onClick={() => navigate(`/category/${category.category}`)}
+                >
+                  See All
+                </h2>
               </div>
             </div>
 
@@ -88,7 +95,10 @@ const CategoryWiseServices: React.FC<CategoryWiseServicesProps> = ({
                 <div className="overflow-x-auto hide-scrollbar -mx-6">
                   <div className="inline-flex gap-6 px-6 py-2 min-w-full w-max">
                     {category.services.map((service) => (
-                      <ElegantVerticalCard service={service} />
+                      <ElegantVerticalCard
+                        service={service}
+                        key={service._id}
+                      />
                     ))}
                   </div>
                 </div>

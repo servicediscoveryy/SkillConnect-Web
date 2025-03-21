@@ -11,9 +11,7 @@
 }
 
 .hover-effect {
-  @apply text-purple-600 bg-slate-100 rounded-lg font-semibold 
-         transition-all duration-300 ease-in-out 
-         transform hover:text-purple-800 hover:bg-slate-200 hover:scale-105;
+  @apply text-purple-600 bg-slate-100 rounded-lg;
 }
 
 .title {
@@ -30,4 +28,10 @@
 
 .text {
   @apply text-xs md:text-sm capitalize;
+}
+
+.button {
+  @apply bg-blue-500 hover:bg-blue-600 text-white rounded-md font-semibold 
+  transition-all duration-300 ease-in-out 
+  transform hover:scale-105;
 }
