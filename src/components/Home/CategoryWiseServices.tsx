@@ -2,33 +2,7 @@ import React from "react";
 import { Wrench, Zap, ChefHat, Wind, Hammer } from "lucide-react";
 import { ElegantVerticalCard } from "../Cards/ServiceCards";
 import { useNavigate } from "react-router-dom";
-
-interface ServiceData {
-  _id: string;
-  title: string;
-  description: string;
-  price: number;
-  location: string;
-  image: string[];
-  status: string;
-  view: number;
-  avgRating: number | null;
-  ratingCount: number;
-  category: {
-    category: string;
-  };
-  createdAt: string;
-}
-
-interface Category {
-  _id: string;
-  category: string;
-  services: ServiceData[];
-}
-
-interface CategoryWiseServicesProps {
-  data: Category[];
-}
+import { CategoryWiseServicesProps } from "../../constant/types";
 
 const getCategoryIcon = (category: string) => {
   switch (category.toLowerCase()) {
@@ -52,6 +26,7 @@ const getCategoryIcon = (category: string) => {
 const CategoryWiseServices: React.FC<CategoryWiseServicesProps> = ({
   data,
 }) => {
+  console.log(data);
   if (!data || data.length === 0) {
     return (
       <div className="p-6 text-center text-gray-500">

@@ -1,35 +1,73 @@
 import React, { useState } from "react";
 import { Mail, KeyRound, ArrowRight } from "lucide-react";
+import api from "../../requests/axiosConfig/api";
+import toast from "react-hot-toast";
+import { useAuth } from "../../context/user.context";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const { setUser } = useAuth();
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [showOtp, setShowOtp] = useState(false);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handleEmailSubmit = (e: React.FormEvent) => {
+  const handleEmailSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setShowOtp(true);
+
+    try {
+      const { success }: { success: boolean } = await api.post("/auth/login", {
+        email,
+      });
+
+      if (success) {
+        setShowOtp(true);
+      }
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
   };
 
-  const handleOtpSubmit = (e: React.FormEvent) => {
+  const handleOtpSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      alert("Login successful!");
+
+    try {
+      const resp: {
+        success: boolean;
+        data: {
+          data: {
+            userId: string;
+            email: string;
+            role: string;
+          };
+        };
+      } = await api.post("/auth/verify", { email, otp });
+
+      if (resp?.success) {
+        setUser(resp.data.data);
+        navigate("/");
+      }
+    } catch (error: any) {
+      toast.error(error.response.data.message);
+    } finally {
       setLoading(false);
-    }, 1000);
+    }
+    // Simulate API call
+
+    // setTimeout(() => {
+    //   alert("Login successful!");
+    //   setLoading(false);
+    // }, 1000);
   };
 
   return (
     <div className=" flex items-center justify-center p-4">
-      <div className="w-full max-w-5xl flex rounded-2xl overflow-hidden shadow-2xl">
+      <div className="w-full max-w-5xl flex  overflow-hidden shadow-2xl">
         <div className="w-1/2 relative hidden md:block h-[600px]">
           <div className="bg-black text-white p-2 rounded h-full text-center flex items-center justify-center">
             <span className="font-bold text-5xl">SC</span>
@@ -142,6 +180,10 @@ const Login = () => {
                 </div>
               </form>
             )}
+          </div>
+
+          <div className="text text-center cursor-pointer text-blue-500 hover:underline">
+            New to Skill Connect? Create an account
           </div>
         </div>
       </div>

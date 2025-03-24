@@ -12,8 +12,9 @@ import {
 import { FaStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { generateSlug } from "../../utils/slug";
+import { ImageRatingData, ServiceData } from "../../constant/types";
 
-interface ServiceData {
+interface ServiceData2 {
   _id: string;
   title: string;
   description: string;
@@ -28,28 +29,6 @@ interface ServiceData {
     category: string;
   };
   createdAt: string;
-}
-
-interface ServiceData2 {
-  _id: string;
-  title: string;
-  description: string;
-  price: number;
-  location: string;
-  image: string[];
-  status: string;
-  view: number;
-  avgRating: number | null;
-  ratingCount: number;
-  category: string;
-  createdAt: string;
-}
-
-interface ImageRatingData {
-  _id: string;
-  image: string[];
-  avgRating: number;
-  title: string;
 }
 
 export const ElegantVerticalCard: React.FC<{ service: ServiceData }> = ({
@@ -124,7 +103,9 @@ export const FeatureVerticalCard: React.FC<{ service: ServiceData2 }> = ({
       <div className="p-5">
         <div className="flex items-center gap-2 mb-3">
           <CheckCircle className="text-green-500" size={18} />
-          <span className="text font-semibold">{service.category}</span>
+          <span className="text font-semibold">
+            {service.category.category}
+          </span>
         </div>
         <h3 className=" subTitle font-bold mb-2">{service.title}</h3>
         <p className="text text-gray-600 mb-4 line-clamp-2">
@@ -147,7 +128,7 @@ export const FeatureVerticalCard: React.FC<{ service: ServiceData2 }> = ({
         <div className="flex items-center justify-between">
           <div>
             <span className="text text-gray-500">Starting from</span>
-            <div className="subTitle">${service.price}</div>
+            <div className="subTitle">₹{service.price}</div>
           </div>
           <button className="px-6 py-2  button">Book Now</button>
         </div>

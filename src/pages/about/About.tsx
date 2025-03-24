@@ -1,69 +1,75 @@
-import React, { useState, useEffect } from "react";
-import { Star, MapPin, Eye, ChefHat, ShoppingCart } from "lucide-react";
+import { useState } from "react";
+import { Star, MapPin, Eye, ShoppingCart } from "lucide-react";
+import StarRating from "../../components/StarRating";
+import ImageCarousel from "../../components/ImageCarousel";
+import { useParams } from "react-router-dom";
+import { useFetch } from "../../hooks/useFetch";
+import { ServiceDetail } from "../../constant/types";
+import CircularLoader from "../../components/CircularLoader";
 
 // Mock data - in real app this would come from props/API
-const serviceData = {
-  title: "cooking service",
-  description: "making the paneer and meat",
-  price: 400,
-  location: "pune",
-  image: [
-    "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&q=80&w=1200",
-    "https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&q=80&w=1200",
-    "https://images.unsplash.com/photo-1428515613728-6b4607e44363?auto=format&fit=crop&q=80&w=1200",
-  ],
-  status: "active",
-  view: 0,
-  provider: {
-    email: "provider@gmail.com",
-    profilePicture:
-      "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-  },
-  ratings: [
-    {
-      rating: 3,
-      description: "good",
-      userId: {
-        email: "provider@gmail.com",
-        profilePicture:
-          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      },
-    },
-    {
-      rating: 3,
-      description: "good",
-      userId: {
-        email: "provider@gmail.com",
-        profilePicture:
-          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      },
-    },
-    {
-      rating: 5,
-      description: "good",
-      userId: {
-        email: "provider@gmail.com",
-        profilePicture:
-          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      },
-    },
-    {
-      rating: 4,
-      description: "good",
-      userId: {
-        email: "provider@gmail.com",
-        profilePicture:
-          "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
-      },
-    },
-  ],
-  ratingAvg: [
-    {
-      avgRating: 3.75,
-      totalRating: 4,
-    },
-  ],
-};
+// const serviceData = {
+//   title: "cooking service",
+//   description: "making the paneer and meat",
+//   price: 400,
+//   location: "pune",
+//   image: [
+//     "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&q=80&w=1200",
+//     "https://images.unsplash.com/photo-1466637574441-749b8f19452f?auto=format&fit=crop&q=80&w=1200",
+//     "https://images.unsplash.com/photo-1428515613728-6b4607e44363?auto=format&fit=crop&q=80&w=1200",
+//   ],
+//   status: "active",
+//   view: 0,
+//   provider: {
+//     email: "provider@gmail.com",
+//     profilePicture:
+//       "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+//   },
+//   ratings: [
+//     {
+//       rating: 3,
+//       description: "good",
+//       userId: {
+//         email: "provider@gmail.com",
+//         profilePicture:
+//           "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+//       },
+//     },
+//     {
+//       rating: 3,
+//       description: "good",
+//       userId: {
+//         email: "provider@gmail.com",
+//         profilePicture:
+//           "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+//       },
+//     },
+//     {
+//       rating: 5,
+//       description: "good",
+//       userId: {
+//         email: "provider@gmail.com",
+//         profilePicture:
+//           "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+//       },
+//     },
+//     {
+//       rating: 4,
+//       description: "good",
+//       userId: {
+//         email: "provider@gmail.com",
+//         profilePicture:
+//           "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png",
+//       },
+//     },
+//   ],
+//   ratingAvg: [
+//     {
+//       avgRating: 3.75,
+//       totalRating: 4,
+//     },
+//   ],
+// };
 
 // Mock related items data
 const relatedItems = [
@@ -93,21 +99,6 @@ const relatedItems = [
   },
 ];
 
-function StarRating({ rating }: { rating: number }) {
-  return (
-    <div className="flex items-center">
-      {[1, 2, 3, 4, 5].map((star) => (
-        <Star
-          key={star}
-          className={`w-5 h-5 ${
-            star <= rating ? "fill-yellow-400 text-yellow-400" : "text-gray-300"
-          }`}
-        />
-      ))}
-    </div>
-  );
-}
-
 function AddToCartButton() {
   const [isAdded, setIsAdded] = useState(false);
 
@@ -133,51 +124,6 @@ function AddToCartButton() {
       />
       <span>{isAdded ? "Added to Cart!" : "Add to Cart"}</span>
     </button>
-  );
-}
-
-function ImageCarousel({ images }: { images: string[] }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [images.length]);
-
-  return (
-    <div className="relative h-72">
-      {images.map((image, index) => (
-        <div
-          key={index}
-          className={`absolute inset-0 transition-opacity duration-1000 ${
-            index === currentIndex ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <img
-            src={image}
-            alt={`Service ${index + 1}`}
-            className="w-full h-full object-cover"
-          />
-        </div>
-      ))}
-      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-        {images.map((_, index) => (
-          <button
-            key={index}
-            className={`w-2 h-2 rounded-full transition-colors ${
-              index === currentIndex ? "bg-white" : "bg-white/50"
-            }`}
-            onClick={() => setCurrentIndex(index)}
-          />
-        ))}
-      </div>
-      <div className="absolute top-4 right-4 bg-green-500 text-white px-3 py-1 rounded-full text-sm font-medium">
-        {serviceData.status}
-      </div>
-    </div>
   );
 }
 
@@ -207,6 +153,22 @@ function RelatedItem({ item }: { item: (typeof relatedItems)[0] }) {
 }
 
 function About() {
+  const { id } = useParams();
+
+  const { response: serviceData, loading } = useFetch<ServiceDetail>(
+    `/services/${id}`
+  );
+
+  console.log(loading);
+
+  if (loading || !serviceData) {
+    return (
+      <div className="w-full h-screen">
+        <CircularLoader />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -214,7 +176,7 @@ function About() {
           {/* Main Content */}
           <div className="lg:w-2/3">
             <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-              <ImageCarousel images={serviceData.image} />
+              <ImageCarousel images={serviceData?.image} />
               <div className="p-8">
                 <div className="flex justify-between items-start">
                   <div>
@@ -247,17 +209,17 @@ function About() {
                 </div>
 
                 <div className="flex items-center mt-6 p-4 bg-gray-50 rounded-lg">
-                  <img
-                    src={serviceData.provider.profilePicture}
+                  {/* <img
+                    src={serviceData.providerId.}
                     alt="Provider"
                     className="w-12 h-12 rounded-full object-cover"
-                  />
+                  /> */}
                   <div className="ml-4">
                     <div className="text-sm text-gray-500">
                       Service Provider
                     </div>
                     <div className="text-gray-900">
-                      {serviceData.provider.email}
+                      {serviceData.providerId.email}
                     </div>
                   </div>
                 </div>
@@ -271,50 +233,52 @@ function About() {
                   </p>
                 </div>
 
-                <div className="mt-8 border-t pt-6">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <h2 className="text-xl font-semibold text-gray-900">
-                        Ratings & Reviews
-                      </h2>
-                      <div className="flex items-center mt-2">
-                        <StarRating
-                          rating={serviceData.ratingAvg[0].avgRating}
-                        />
-                        <span className="ml-2 text-gray-600">
-                          {serviceData.ratingAvg[0].avgRating.toFixed(1)} (
-                          {serviceData.ratingAvg[0].totalRating} reviews)
-                        </span>
+                {serviceData.ratings.length > 0 && (
+                  <div className="mt-8 border-t pt-6">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h2 className="text-xl font-semibold text-gray-900">
+                          Ratings & Reviews
+                        </h2>
+                        <div className="flex items-center mt-2">
+                          <StarRating
+                            rating={serviceData.ratingAvg[0].avgRating}
+                          />
+                          <span className="ml-2 text-gray-600">
+                            {serviceData.ratingAvg[0].avgRating.toFixed(1)} (
+                            {serviceData.ratingAvg[0].totalRating} reviews)
+                          </span>
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <div className="mt-6 space-y-6">
-                    {serviceData.ratings.map((review, index) => (
-                      <div
-                        key={index}
-                        className="border-b pb-6 last:border-b-0"
-                      >
-                        <div className="flex items-center">
-                          <img
-                            src={review.userId.profilePicture}
-                            alt={review.userId.email}
-                            className="w-10 h-10 rounded-full object-cover"
-                          />
-                          <div className="ml-4">
-                            <div className="text-sm font-medium text-gray-900">
-                              {review.userId.email}
+                    <div className="mt-6 space-y-6">
+                      {serviceData.ratings.map((review, index) => (
+                        <div
+                          key={index}
+                          className="border-b pb-6 last:border-b-0"
+                        >
+                          <div className="flex items-center">
+                            <img
+                              src={review.userId.profilePicture}
+                              alt={review.userId.email}
+                              className="w-10 h-10 rounded-full object-cover"
+                            />
+                            <div className="ml-4">
+                              <div className="text-sm font-medium text-gray-900">
+                                {review.userId.email}
+                              </div>
+                              <StarRating rating={review.rating} />
                             </div>
-                            <StarRating rating={review.rating} />
                           </div>
+                          <p className="mt-2 text-gray-600">
+                            {review.description}
+                          </p>
                         </div>
-                        <p className="mt-2 text-gray-600">
-                          {review.description}
-                        </p>
-                      </div>
-                    ))}
+                      ))}
+                    </div>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </div>

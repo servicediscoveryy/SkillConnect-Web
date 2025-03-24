@@ -1,7 +1,11 @@
+import { useAuth } from "../../context/user.context";
 import FooterColumn from "./FooterColumn";
 import { Facebook, Github, Instagram, Linkedin } from "lucide-react";
 
 const Footer = () => {
+  const { user } = useAuth();
+
+  console.log(user);
   return (
     <footer className="bg-gray-200   py-8">
       <div className="container mx-auto px-4">
