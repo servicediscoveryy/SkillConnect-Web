@@ -1,5 +1,6 @@
 import { ShoppingCart } from "lucide-react";
 import { User } from "../../constant/types";
+import { Avatar } from "@mui/material";
 
 interface DesktopNavProps {
   user: User;
@@ -17,19 +18,21 @@ const DesktopNav: React.FC<DesktopNavProps> = ({ user, navigate }) => {
           Login
         </button>
       ) : (
-        <div>Welcome, {user.email[0].toUpperCase()}</div>
+        <div className="flex items-center gap-2">
+          Welcome <Avatar> {user.email[0].toUpperCase()}</Avatar>
+        </div>
       )}
 
       <a href="/seller" className="text-sm font-medium hover:text-blue-600">
         Register As Provider
       </a>
 
-      <a
-        href="/cart"
-        className="flex items-center text-sm font-medium hover:text-blue-600"
+      <div
+        onClick={() => navigate("/cart")}
+        className="flex items-center text-sm font-medium hover:text-blue-600 cursor-pointer"
       >
         <ShoppingCart className="w-5 h-5 mr-2" /> Cart
-      </a>
+      </div>
     </div>
   );
 };

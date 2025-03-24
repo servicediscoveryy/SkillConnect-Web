@@ -7,25 +7,31 @@ import DesktopNav from "./DesktopNav";
 import MobileMenu from "./MobileMenu";
 import SearchBar from "./SearchResult";
 import Location from "./Location";
+import api from "../../requests/axiosConfig/api";
+import { searchData } from "../../constant/types";
 
 // Main NavBar Component
 const NavBar: React.FC = () => {
   const { user } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [searchResult, setSearchResult] = useState<string[]>([]);
+  const [searchResult, setSearchResult] = useState<searchData[]>([]);
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
 
-  // Prevent infinite re-renders
   useEffect(() => {
-    if (searchResult.length === 0) {
-      setSearchResult([
-        "Sample result 1",
-        "Sample result 2",
-        "Sample result 3",
-      ]);
-    }
-  }, [searchResult]);
+    const delayDebounceFn = setTimeout(async () => {
+      if (query.trim()) {
+        const response = await api.get(
+          `/services/search-suggestion?query=${query}`
+        );
+        setSearchResult(response.data);
+      } else {
+        setSearchResult([]);
+      }
+    }, 300); // ✅ Waits 300ms before making the API call
+
+    return () => clearTimeout(delayDebounceFn); // ✅ Clears timeout if query changes quickly
+  }, [query]);
 
   return (
     <nav className="bg-white text-black py-1 px-3">

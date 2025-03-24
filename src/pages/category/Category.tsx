@@ -3,7 +3,7 @@ import { ServiceData } from "../../constant/types";
 import ServiceCard from "../../components/Category/ServiceCard";
 import Filters from "../../components/Category/Filters";
 import useFetchData from "../../hooks/useFetchData";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams, useSearchParams } from "react-router-dom";
 import CircularLoader from "../../components/CircularLoader";
 
 const Category = () => {
@@ -15,7 +15,13 @@ const Category = () => {
     sort: "recommended",
   };
 
-  const { category } = useParams();
+  const location = useLocation();
+
+  const [query] = useSearchParams();
+
+  console.log(query);
+
+  const { category = "plumber" } = useParams();
 
   const [priceRange, setPriceRange] = React.useState<[number, number]>(
     initialState.priceRange
@@ -31,11 +37,11 @@ const Category = () => {
   const [sortBy, setSortBy] = React.useState<string>(initialState.sort);
   const [showFilters, setShowFilters] = React.useState(false);
 
-  const { data: services, loading } = useFetchData(
-    `/services?category=${category}`
-  );
+  const isSearchPage = location.pathname.includes("search");
 
-  console.log(services);
+  const { data: services, loading } = isSearchPage
+    ? useFetchData(`/services?${query}`)
+    : useFetchData(`/services?category=${category}`);
 
   // Sample data - replace with your actual data
 

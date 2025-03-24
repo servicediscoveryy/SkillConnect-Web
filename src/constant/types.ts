@@ -85,3 +85,8 @@ export interface User {
   role: string;
   userId: string;
 }
+
+export interface searchData {
+  _id: string;
+  title: string;
+}
