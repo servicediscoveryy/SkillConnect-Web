@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import StarRating from "../StarRating";
 import { ServiceData } from "../../constant/types";
 import { generateSlug } from "../../utils/slug";
+import BookNowButton from "../BookNowButton";
 
 interface ServiceCardProps {
   service: ServiceData;
@@ -50,9 +51,7 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
                 ({service.ratingCount})
               </span>
             </div>
-            <button className="bg-blue-500 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-blue-600 transition-colors focus:ring-2 focus:ring-blue-300 focus:outline-none">
-              Book Now
-            </button>
+            <BookNowButton serviceId={service._id} />
           </div>
         </div>
       </div>

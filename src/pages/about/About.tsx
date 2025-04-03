@@ -2,10 +2,11 @@ import { useState } from "react";
 import { Star, MapPin, Eye, ShoppingCart } from "lucide-react";
 import StarRating from "../../components/StarRating";
 import ImageCarousel from "../../components/ImageCarousel";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
 import { ServiceDetail } from "../../constant/types";
 import CircularLoader from "../../components/CircularLoader";
+import { useAuth } from "../../context/user.context";
 
 // Mock data - in real app this would come from props/API
 // const serviceData = {
@@ -100,9 +101,14 @@ const relatedItems = [
 ];
 
 function AddToCartButton() {
+  const { user } = useAuth();
   const [isAdded, setIsAdded] = useState(false);
+  const navigate = useNavigate();
 
   const handleClick = () => {
+    if (!user) {
+      navigate("/login");
+    }
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 1500);
   };

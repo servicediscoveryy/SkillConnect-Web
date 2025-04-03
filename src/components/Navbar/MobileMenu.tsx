@@ -24,9 +24,12 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
         >
           <div className="flex flex-col divide-y divide-gray-200">
             {user?.email ? (
-              <div className="flex justify-end px-3 py-2 items-center">
-                Welcome
-                <Avatar> {user.email[0].toUpperCase()}</Avatar>
+              <div className="flex  px-3 py-2 items-center">
+                <Avatar sx={{ width: 30, height: 30 }}>
+                  {" "}
+                  {user.email[0].toUpperCase()}
+                </Avatar>
+                <p className="mx-3"> Account</p>
               </div>
             ) : (
               <div
@@ -40,15 +43,11 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
             <a href="/seller" className="px-4 py-3 hover:bg-gray-100">
               Become a Seller
             </a>
-            <a href="/more" className="px-4 py-3 hover:bg-gray-100">
-              More
-            </a>
-            <div
-              onClick={() => navigate("/cart")}
-              className="px-4 py-3 flex items-center hover:bg-gray-100"
-            >
-              <ShoppingCart className="w-5 h-5 mr-2" /> Cart
-            </div>
+            {user && (
+              <div className="px-4 py-3 hover:bg-gray-100 text-red-500">
+                Log Out
+              </div>
+            )}
           </div>
         </motion.div>
       )}

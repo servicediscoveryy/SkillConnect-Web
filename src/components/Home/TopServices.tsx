@@ -1,6 +1,6 @@
 import { ServiceData } from "../../constant/types";
 import { FeatureVerticalCard } from "../Cards/ServiceCards";
-import CircularLoader from "../CircularLoader";
+
 const TopServices = ({ data }: { data: ServiceData[] }) => {
   console.log(data);
   return (

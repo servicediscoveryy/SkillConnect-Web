@@ -90,3 +90,36 @@ export interface searchData {
   _id: string;
   title: string;
 }
+
+interface Service {
+  _id: string;
+  title: string;
+  description: string;
+  price: number;
+  location: string;
+  image: string[]; // Array of image URLs or base64 strings
+}
+
+interface CartItem {
+  serviceId: Service; // The service being added to the cart
+}
+
+interface Cart {
+  items: CartItem[]; // Array of cart items
+}
+
+export interface CartData {
+  cart: Cart[]; // Array of carts (assuming multiple carts are possible)
+  totalItems: number;
+  totalAmount: number;
+}
+
+export interface AddressData {
+  street: string;
+  area?: string;
+  city: string;
+  state: string;
+  country: string;
+  pincode: string;
+  landmark?: string;
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, ShoppingCart, X } from "lucide-react";
 import Logo from "../../assets/logo/Logo.png";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/user.context";
@@ -12,11 +12,17 @@ import { searchData } from "../../constant/types";
 
 // Main NavBar Component
 const NavBar: React.FC = () => {
-  const { user } = useAuth();
+  const { user, fetchCartCount, cartCount } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchResult, setSearchResult] = useState<searchData[]>([]);
   const [query, setQuery] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (user?.email) {
+      fetchCartCount();
+    }
+  }, [user]);
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(async () => {
@@ -49,20 +55,31 @@ const NavBar: React.FC = () => {
           {/* Desktop Navigation */}
 
           {/* @ts-expect-error */}
-          <DesktopNav user={user} navigate={navigate} />
+          <DesktopNav user={user} navigate={navigate} cartCount={cartCount} />
 
           {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2 focus:outline-none"
-            aria-label="Toggle Menu"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          >
-            {isMobileMenuOpen ? (
-              <X className="w-6 h-6" />
-            ) : (
-              <Menu className="w-6 h-6" />
-            )}
-          </button>
+
+          <div className="flex items-center md:hidden p-2 ">
+            <div className="relative">
+              <ShoppingCart />
+              <div className="absolute -top-2 right-0 text-xs bg-red-400 rounded-full p-0.5 px-1">
+                {cartCount}
+              </div>
+            </div>
+            <button
+              className="md:hidden p-2 focus:outline-none"
+              aria-label="Toggle Menu"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              {isMobileMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <>
+                  <Menu className="w-6 h-6" />
+                </>
+              )}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Search Bar */}

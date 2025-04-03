@@ -13,6 +13,7 @@ import { FaStar } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { generateSlug } from "../../utils/slug";
 import { ImageRatingData, ServiceData } from "../../constant/types";
+import BookNowButton from "../BookNowButton";
 
 interface ServiceData2 {
   _id: string;
@@ -69,7 +70,7 @@ export const ElegantVerticalCard: React.FC<{ service: ServiceData }> = ({
             <Star className="text-yellow-400" size={16} fill="currentColor" />
             <span>{service.avgRating || "New"}</span>
           </div>
-          <button className=" px-4 py-2 button">Add Now</button>
+          <BookNowButton serviceId={service._id} />
         </div>
       </div>
     </div>
@@ -130,7 +131,7 @@ export const FeatureVerticalCard: React.FC<{ service: ServiceData2 }> = ({
             <span className="text text-gray-500">Starting from</span>
             <div className="subTitle">₹{service.price}</div>
           </div>
-          <button className="px-6 py-2  button">Book Now</button>
+          <BookNowButton serviceId={service._id} />
         </div>
       </div>
     </div>
@@ -162,9 +163,7 @@ export const PremiumVerticalCard: React.FC<{ service: ServiceData }> = ({
     </div>
     <div className="flex justify-between items-center">
       <span className="text-2xl font-bold">${service.price}</span>
-      <button className="bg-white text-gray-900 px-6 py-2 rounded-lg hover:bg-gray-100">
-        Book Now
-      </button>
+      <BookNowButton serviceId={service._id} />
     </div>
   </div>
 );
@@ -228,9 +227,7 @@ export const PremiumHorizontalCard: React.FC<{ service: ServiceData }> = ({
         </div>
       </div>
       <div className="flex gap-3">
-        <button className="flex-1 bg-white text-gray-900 px-6 py-2 rounded-lg hover:bg-gray-100">
-          Book Now
-        </button>
+        <BookNowButton serviceId={service._id} />
         <button className="px-6 py-2 border border-gray-600 rounded-lg hover:border-gray-500">
           Learn More
         </button>
