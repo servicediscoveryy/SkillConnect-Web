@@ -19,9 +19,7 @@ const NavBar: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user?.email) {
-      fetchCartCount();
-    }
+    fetchCartCount();
   }, [user]);
 
   useEffect(() => {
@@ -58,16 +56,15 @@ const NavBar: React.FC = () => {
           <DesktopNav user={user} navigate={navigate} cartCount={cartCount} />
 
           {/* Mobile Menu Button */}
-
-          <div className="flex items-center md:hidden p-2 ">
-            <div className="relative">
+          <div className="flex items-center md:hidden p-2 cursor-pointer">
+            <div className="relative" onClick={() => navigate("/cart")}>
               <ShoppingCart />
               <div className="absolute -top-2 right-0 text-xs bg-red-400 rounded-full p-0.5 px-1">
                 {cartCount}
               </div>
             </div>
             <button
-              className="md:hidden p-2 focus:outline-none"
+              className="md:hidden p-2 focus:outline-none cursor-pointer"
               aria-label="Toggle Menu"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >

@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import api from "../../requests/axiosConfig/api";
+import CircularLoader from "../CircularLoader";
+import toast from "react-hot-toast";
 
 export const ProfileSection: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -26,7 +30,7 @@ export const ProfileSection: React.FC = () => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     let valid = true;
     let newErrors = { firstName: "", lastName: "", phone: "" };
@@ -44,18 +48,50 @@ export const ProfileSection: React.FC = () => {
     setErrors(newErrors);
 
     if (valid) {
-      alert("Profile updated successfully!");
+      try {
+        await api.patch("/auth/profile", formData, {
+          withCredentials: true,
+        });
+        toast.success("Update profile Successfully");
+        fetchUser();
+      } catch (error) {
+        // @ts-expect-error
+        toast.error(error.response.data.message || "something went wrong...");
+
+        console.log(error);
+      } finally {
+      }
     }
   };
 
   const fetchUser = async () => {
-    const response = await api.get("/auth/profile", { withCredentials: true });
-    console.log(response.data.profile);
+    try {
+      setLoading(true);
+      const response = await api.get("/auth/profile", {
+        withCredentials: true,
+      });
+      console.log(response.data.profile);
+      const { firstName, lastName, phone, profileImage } =
+        response.data.profile;
+      setFormData({ firstName, lastName, phone, profileImage });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
     fetchUser();
   }, []);
+
+  if (loading) {
+    return (
+      <div>
+        <CircularLoader />;
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">

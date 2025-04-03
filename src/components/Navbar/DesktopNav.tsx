@@ -3,6 +3,8 @@ import { ChevronDown, ChevronUp, ShoppingCart } from "lucide-react";
 import { User } from "../../constant/types";
 import { Avatar } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import api from "../../requests/axiosConfig/api";
+import { useAuth } from "../../context/user.context";
 
 interface DesktopNavProps {
   user: User;
@@ -12,6 +14,18 @@ interface DesktopNavProps {
 
 const MoreMenu = () => {
   const navigate = useNavigate();
+
+  const { setUser } = useAuth();
+
+  const handleLogOut = async () => {
+    try {
+      await api.get("/auth/logout", { withCredentials: true });
+      setUser(null);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="absolute right-0 mt-0.5 w-32 bg-white shadow-lg border border-gray-200 rounded-lg p-2 z-10">
       <p
@@ -28,7 +42,7 @@ const MoreMenu = () => {
       </p>
       <p
         className="p-2 hover:bg-gray-100 cursor-pointer"
-        onClick={() => navigate("/profile")}
+        onClick={() => handleLogOut()}
       >
         Logout
       </p>
@@ -47,7 +61,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
     <div className="hidden md:flex items-center space-x-6 relative">
       {!user?.email ? (
         <button
-          className="button px-2 py-1 font-bold text-sm hover:underline"
+          className="button px-2 py-1 font-bold text-sm hover:underline cursor-pointer"
           onClick={() => navigate("/login")}
         >
           Login
@@ -62,7 +76,6 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
           <div
             className="flex items-center gap-2 cursor-pointer border border-gray-300 rounded-lg p-1"
             title="Profile"
-            onClick={() => navigate("/profile")}
           >
             <Avatar sx={{ width: 30, height: 30 }}>
               {user.email[0].toUpperCase()}

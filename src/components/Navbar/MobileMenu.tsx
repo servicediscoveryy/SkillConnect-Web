@@ -1,8 +1,8 @@
 import { Avatar } from "@mui/material";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/user.context";
+import api from "../../requests/axiosConfig/api";
 
 // Mobile Menu Component
 interface MobileMenuProps {
@@ -11,8 +11,19 @@ interface MobileMenuProps {
 }
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const navigate = useNavigate();
+
+  const handleLogOut = async () => {
+    try {
+      await api.get("/auth/logout", { withCredentials: true });
+      setUser(null);
+      navigate("/");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -22,9 +33,15 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
           exit={{ opacity: 0, y: -10 }}
           className="md:hidden bg-white text-gray-800 absolute left-0 right-0 shadow-lg z-50"
         >
-          <div className="flex flex-col divide-y divide-gray-200">
+          <div className="flex flex-col divide-y divide-gray-200 cursor-pointer">
             {user?.email ? (
-              <div className="flex  px-3 py-2 items-center">
+              <div
+                className="flex  px-3 py-2 items-center cursor-pointer"
+                onClick={() => {
+                  navigate("/profile");
+                  onClose();
+                }}
+              >
                 <Avatar sx={{ width: 30, height: 30 }}>
                   {" "}
                   {user.email[0].toUpperCase()}
@@ -41,10 +58,16 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
             )}
 
             <a href="/seller" className="px-4 py-3 hover:bg-gray-100">
-              Become a Seller
+              Become a Provider
             </a>
             {user && (
-              <div className="px-4 py-3 hover:bg-gray-100 text-red-500">
+              <div
+                className="px-4 py-3 hover:bg-gray-100 text-red-500"
+                onClick={() => {
+                  handleLogOut();
+                  onClose();
+                }}
+              >
                 Log Out
               </div>
             )}

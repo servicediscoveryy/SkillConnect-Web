@@ -48,10 +48,13 @@ export const AddressSection: React.FC = () => {
 
   const fetchAddress = async () => {
     try {
+      setLoading(true);
       const response = await api.get("/address");
       setAddresses(response.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 

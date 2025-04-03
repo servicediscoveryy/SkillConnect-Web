@@ -6,6 +6,7 @@ import About from "../pages/about/About";
 import Category from "../pages/category/Category";
 import Cart from "../pages/cart/Cart";
 import Profile from "../pages/profile/Profile";
+import ProtectedComponent from "./ProtectedComponent";
 
 const AppRoutes = () => {
   return (
@@ -18,7 +19,14 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 
-      <Route path="/profile" element={<Profile />} />
+      <Route
+        path="/profile"
+        element={
+          <ProtectedComponent>
+            <Profile />
+          </ProtectedComponent>
+        }
+      />
     </Routes>
   );
 };
