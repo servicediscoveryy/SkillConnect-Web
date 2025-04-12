@@ -6,6 +6,7 @@ import CircularLoader from "../../components/CircularLoader";
 import toast from "react-hot-toast";
 import { MapPinPlus, Navigation, Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { handleCheckOutSingleService } from "../../utils/pay";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -197,7 +198,7 @@ const Cart = () => {
           </div>
           <button
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-            onClick={() => console.log("Proceed to checkout")}
+            onClick={() => handleCheckOutSingleService(["1234", "1234"])}
           >
             Proceed to Checkout
           </button>
