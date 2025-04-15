@@ -17,9 +17,8 @@ const BookNowButton = ({ serviceId }: { serviceId: string }) => {
         navigate("/login");
       }
       setLoading(true);
+      recordInteraction(serviceId,"book");
       const response = await api.post("/cart", { serviceId });
-      recordInteraction(serviceId, "cart");
-      fetchCartCount();
       // @ts-expect-error
       toast.success(response?.message);
     } catch (error) {

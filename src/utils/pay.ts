@@ -9,15 +9,17 @@ declare global {
 
 export const handleCheckOutSingleService = async (
   service: string[],
+  address: string,
+
   navigate?: () => void
 ) => {
   try {
     const order = await api.post(
       "/payment/check",
-      { service },
+      { service, address, method: "online" },
       { withCredentials: true }
     );
-    console.log(order)
+    console.log(order);
     const orderData = order?.order;
     const keyId = order?.keyId;
 
