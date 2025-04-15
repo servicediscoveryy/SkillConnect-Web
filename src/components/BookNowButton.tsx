@@ -4,9 +4,10 @@ import api from "../requests/axiosConfig/api";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { SyncLoader } from "react-spinners";
+import { recordInteraction } from "../hooks/IncrementCount";
 
 const BookNowButton = ({ serviceId }: { serviceId: string }) => {
-  const { user } = useAuth();
+  const { user, fetchCartCount } = useAuth();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const addToCart = async (e: React.MouseEvent) => {
@@ -17,7 +18,8 @@ const BookNowButton = ({ serviceId }: { serviceId: string }) => {
       }
       setLoading(true);
       const response = await api.post("/cart", { serviceId });
-
+      recordInteraction(serviceId, "cart");
+      fetchCartCount();
       // @ts-expect-error
       toast.success(response?.message);
     } catch (error) {

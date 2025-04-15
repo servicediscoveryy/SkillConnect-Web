@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import { MapPinPlus, Navigation, Trash } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { handleCheckOutSingleService } from "../../utils/pay";
+import { generateSlug } from "../../utils/slug";
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -43,14 +44,11 @@ const Cart = () => {
 
   const fetchAddress = async () => {
     try {
-      setLoading(true);
       const response = await api.get("/address");
       setAddress(response.data);
       setSelectedAddress(response.data[response.data.length - 1]);
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -150,7 +148,7 @@ const Cart = () => {
               {cartItem.items.map((item, itemIndex) => (
                 <div
                   key={itemIndex}
-                  className="flex items-center gap-6 py-4 border-b"
+                  className="flex items-center gap-6 py-4 border-b cursor-pointer hover:bg-gray-50 transition-colors"
                 >
                   <div className="w-24 h-24 flex-shrink-0">
                     <img
@@ -159,7 +157,16 @@ const Cart = () => {
                       className="w-full h-full object-cover rounded-md"
                     />
                   </div>
-                  <div className="flex-grow">
+                  <div
+                    className="flex-grow"
+                    onClick={() => {
+                      navigate(
+                        `/${item?.serviceId._id}/${generateSlug(
+                          item.serviceId.title
+                        )}`
+                      );
+                    }}
+                  >
                     <h3 className="text-lg font-semibold text-gray-800">
                       {item.serviceId.title}
                     </h3>
@@ -176,7 +183,7 @@ const Cart = () => {
                     </div>
                   </div>
                   <button
-                    className="text-red-500 hover:text-red-700 transition-colors cursor-pointer "
+                    className="text-red-500 hover:text-red-700 transition-colors cursor-pointer z-10"
                     onClick={() => handleRemoveItem(item?.serviceId?._id)}
                   >
                     <Trash />
@@ -198,7 +205,13 @@ const Cart = () => {
           </div>
           <button
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
-            onClick={() => handleCheckOutSingleService(["1234", "1234"])}
+            onClick={() => {
+              const allItems = cartData?.cart.flatMap(
+                (cartItem) => cartItem?.items
+              );
+              console.log(allItems);
+              handleCheckOutSingleService(["1234", "1234"]);
+            }}
           >
             Proceed to Checkout
           </button>

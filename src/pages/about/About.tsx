@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Star, MapPin, Eye, ShoppingCart } from "lucide-react";
 import StarRating from "../../components/StarRating";
 import ImageCarousel from "../../components/ImageCarousel";
 import { useNavigate, useParams } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
-import { ServiceDetail } from "../../constant/types";
+import { CategoryType, ServiceData, ServiceDetail } from "../../constant/types";
 import CircularLoader from "../../components/CircularLoader";
 import { useAuth } from "../../context/user.context";
+import api from "../../requests/axiosConfig/api";
+import useFetchData from "../../hooks/useFetchData";
 
 // Mock data - in real app this would come from props/API
 // const serviceData = {
@@ -73,32 +75,6 @@ import { useAuth } from "../../context/user.context";
 // };
 
 // Mock related items data
-const relatedItems = [
-  {
-    id: 1,
-    title: "Baking Service",
-    price: 350,
-    image:
-      "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=1200",
-    rating: 4.5,
-  },
-  {
-    id: 2,
-    title: "Catering Service",
-    price: 600,
-    image:
-      "https://images.unsplash.com/photo-1555244162-803834f70033?auto=format&fit=crop&q=80&w=1200",
-    rating: 4.8,
-  },
-  {
-    id: 3,
-    title: "Private Chef",
-    price: 800,
-    image:
-      "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?auto=format&fit=crop&q=80&w=1200",
-    rating: 4.7,
-  },
-];
 
 function AddToCartButton() {
   const { user } = useAuth();
@@ -133,11 +109,11 @@ function AddToCartButton() {
   );
 }
 
-function RelatedItem({ item }: { item: (typeof relatedItems)[0] }) {
+function RelatedItem({ item }: { item: ServiceData }) {
   return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 min-w-full">
       <img
-        src={item.image}
+        src={item.image[0]}
         alt={item.title}
         className="w-full h-48 object-cover"
       />
@@ -147,10 +123,10 @@ function RelatedItem({ item }: { item: (typeof relatedItems)[0] }) {
           <span className="text-lg font-bold text-gray-900">₹{item.price}</span>
           <div className="flex items-center">
             <Star className="w-4 h-4 text-yellow-400 fill-yellow-400" />
-            <span className="ml-1 text-sm text-gray-600">{item.rating}</span>
+            <span className="ml-1 text-sm text-gray-600">{item.avgRating}</span>
           </div>
         </div>
-        <button className="mt-3 w-full px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors">
+        <button className="mt-3 w-full px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 transition-colors cursor-pointer">
           View Details
         </button>
       </div>
@@ -161,11 +137,44 @@ function RelatedItem({ item }: { item: (typeof relatedItems)[0] }) {
 function About() {
   const { id } = useParams();
 
+  const [relatedItems, setReletedItems] = useState([]);
+
   const { response: serviceData, loading } = useFetch<ServiceDetail>(
     `/services/${id}`
   );
+  useEffect(() => {
+    if (!serviceData?.category) return;
 
-  console.log(loading);
+    const fetchRelatedItems = async () => {
+      try {
+        // 1. Get all categories
+        const { data: categories } = await api.get<CategoryType[]>("/category");
+
+        console.log(categories);
+
+        // 2. Find category name using the category ID
+        const selectedCategory = categories.find(
+          (cat) => cat._id === serviceData.category
+        );
+
+        console.log(selectedCategory);
+        if (!selectedCategory) return;
+
+        const categoryName = selectedCategory.category;
+
+        // 3. Fetch related services using the category name
+        const response = await api.get(`/services?category=${categoryName}`);
+
+        setReletedItems(response.data);
+        // 4. Set related items
+        console.log(response);
+      } catch (error) {
+        console.error("Error fetching related items:", error);
+      }
+    };
+
+    fetchRelatedItems();
+  }, [serviceData?.category]);
 
   if (loading || !serviceData) {
     return (
@@ -295,9 +304,10 @@ function About() {
               <h2 className="text-xl font-bold text-gray-900 mb-4">
                 Related Services
               </h2>
-              <div className="space-y-4">
+              <div className="space-y-4 flex gap-3 overflow-x-scroll overflow-y-hidden lg:flex-col">
                 {relatedItems.map((item) => (
-                  <RelatedItem key={item.id} item={item} />
+                  // @ts-expect-error
+                  <RelatedItem key={item._id} item={item} />
                 ))}
               </div>
             </div>

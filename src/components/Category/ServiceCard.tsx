@@ -4,6 +4,7 @@ import StarRating from "../StarRating";
 import { ServiceData } from "../../constant/types";
 import { generateSlug } from "../../utils/slug";
 import BookNowButton from "../BookNowButton";
+import { recordInteraction } from "../../hooks/IncrementCount";
 
 interface ServiceCardProps {
   service: ServiceData;
@@ -14,7 +15,10 @@ const ServiceCard = ({ service }: ServiceCardProps) => {
 
   return (
     <div
-      onClick={() => navigate(`/${service._id}/${generateSlug(service.title)}`)}
+      onClick={() => {
+        navigate(`/${service._id}/${generateSlug(service.title)}`);
+        recordInteraction(service._id, "view");
+      }}
       className="group bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
     >
       <div className="relative">
