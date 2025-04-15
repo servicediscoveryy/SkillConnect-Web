@@ -4,6 +4,7 @@ import api from "../requests/axiosConfig/api";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { SyncLoader } from "react-spinners";
+import { recordInteraction } from "../hooks/IncrementCount";
 
 const BookNowButton = ({ serviceId }: { serviceId: string }) => {
   const { user } = useAuth();
@@ -16,8 +17,8 @@ const BookNowButton = ({ serviceId }: { serviceId: string }) => {
         navigate("/login");
       }
       setLoading(true);
+      recordInteraction(serviceId,"book");
       const response = await api.post("/cart", { serviceId });
-
       // @ts-expect-error
       toast.success(response?.message);
     } catch (error) {

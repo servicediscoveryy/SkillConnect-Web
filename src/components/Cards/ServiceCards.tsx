@@ -14,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { generateSlug } from "../../utils/slug";
 import { ImageRatingData, ServiceData } from "../../constant/types";
 import BookNowButton from "../BookNowButton";
+import { recordInteraction } from "../../hooks/IncrementCount";
 
 interface ServiceData2 {
   _id: string;
@@ -32,6 +33,9 @@ interface ServiceData2 {
   createdAt: string;
 }
 
+
+
+
 export const ElegantVerticalCard: React.FC<{ service: ServiceData }> = ({
   service,
 }) => {
@@ -39,7 +43,10 @@ export const ElegantVerticalCard: React.FC<{ service: ServiceData }> = ({
   return (
     <div
       className="bg-white rounded-xl overflow-hidden shadow-lg group cursor-pointer"
-      onClick={() => navigate(`/${service._id}/${generateSlug(service.title)}`)}
+      onClick={() => {
+        navigate(`/${service._id}/${generateSlug(service.title)}`)
+        recordInteraction(service._id, "view")
+      }}
     >
       <div className="relative">
         <img
@@ -88,7 +95,7 @@ export const FeatureVerticalCard: React.FC<{ service: ServiceData2 }> = ({
       className="bg-white rounded-xl shadow-lg overflow-hidden min-w-md cursor-pointer"
       onClick={() => navigate(`${service._id}/${generateSlug(service.title)}`)}
     >
-      <div className="relative">
+      <div className="relative" onClick={() => recordInteraction(service._id, "view")}>
         <img
           src={
             service.image[0] ||
@@ -172,7 +179,7 @@ export const PremiumHorizontalCard: React.FC<{ service: ServiceData }> = ({
   service,
 }) => (
   <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl shadow-xl flex overflow-hidden">
-    <div className="w-2/5 relative">
+    <div onClick={() => recordInteraction(service._id, "view")} className="w-2/5 relative">
       <img
         src={
           service.image[0] ||
@@ -244,7 +251,11 @@ export const ImageRating: React.FC<{ service: ImageRatingData }> = ({
   return (
     <div
       className="flex flex-col items-center cursor-pointer"
-      onClick={() => navigate(`${service._id}/${generateSlug(service.title)}`)}
+      onClick={() => {
+        recordInteraction(service._id, "view")
+        navigate(`${service._id}/${generateSlug(service.title)}`)
+      }}
+
     >
       <div className="w-[120px] sm:w-[150px] md:w-[180px] h-auto group">
         <div className="relative">
