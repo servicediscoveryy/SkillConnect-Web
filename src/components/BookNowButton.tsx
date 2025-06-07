@@ -34,7 +34,7 @@ const BookNowButton = ({ serviceId }: { serviceId: string }) => {
 
   return (
     <button
-      className="bg-blue-500 text-white px-4 py-1.5 rounded-full text-sm font-medium hover:bg-blue-600 transition-colors focus:ring-2 focus:ring-blue-300 focus:outline-none z-10 cursor-pointer"
+      className="bg-blue-500 text-white px-2 py-1.5 rounded-full text-sm font-medium hover:bg-blue-600 transition-colors focus:ring-2 focus:ring-blue-300 focus:outline-none z-10 cursor-pointer text-nowrap mx-2"
       onClick={(e) => addToCart(e)}
     >
       {loading ? <SyncLoader size={7} /> : "Book Now"}

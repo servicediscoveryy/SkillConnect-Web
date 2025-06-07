@@ -12,8 +12,11 @@ import {
   ImageRatingData,
   ServiceData,
 } from "../../constant/types";
+import Recommend from "../../components/Home/Recommend";
+import { useAuth } from "../../context/user.context";
 
 const Home = () => {
+  const { user } = useAuth();
   const { data: categoryData, loading: categoryLoading } =
     useFetchData<CategoryType[]>("/category");
 
@@ -39,11 +42,14 @@ const Home = () => {
     return <CircularLoader />;
   }
 
+
+  console.log(user)
   return (
     <div className="">
       <Category data={categoryData} />
       <Banner />
-      <div>Recommendation</div>
+
+      {user?.email && <Recommend />}
       <TopServices data={topServices} />
       <PopularArea data={popularAreas} />
       {/* @ts-expect-error */}

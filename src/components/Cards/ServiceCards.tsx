@@ -33,19 +33,16 @@ interface ServiceData2 {
   createdAt: string;
 }
 
-
-
-
 export const ElegantVerticalCard: React.FC<{ service: ServiceData }> = ({
   service,
 }) => {
   const navigate = useNavigate();
   return (
     <div
-      className="bg-white rounded-xl overflow-hidden shadow-lg group cursor-pointer"
+      className="bg-white rounded-xl overflow-hidden w-xs shadow-lg group cursor-pointer"
       onClick={() => {
-        navigate(`/${service._id}/${generateSlug(service.title)}`)
-        recordInteraction(service._id, "view")
+        navigate(`/${service._id}/${generateSlug(service.title)}`);
+        recordInteraction(service._id, "view");
       }}
     >
       <div className="relative">
@@ -85,27 +82,31 @@ export const ElegantVerticalCard: React.FC<{ service: ServiceData }> = ({
 };
 
 // Feature Cards
-export const FeatureVerticalCard: React.FC<{ service: ServiceData2 }> = ({
-  service,
-}) => {
+export const FeatureVerticalCard: React.FC<{
+  service: ServiceData2;
+  tag: string;
+}> = ({ service, tag }) => {
   const navigate = useNavigate();
 
   return (
     <div
-      className="bg-white rounded-xl shadow-lg overflow-hidden min-w-md cursor-pointer"
+      className="bg-white rounded-xl shadow-md overflow-hidden min-w-xs cursor-pointer"
       onClick={() => navigate(`${service._id}/${generateSlug(service.title)}`)}
     >
-      <div className="relative" onClick={() => recordInteraction(service._id, "view")}>
+      <div
+        className="relative"
+        onClick={() => recordInteraction(service._id, "view")}
+      >
         <img
           src={
             service.image[0] ||
             "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800"
           }
           alt={service.title}
-          className="w-full h-48 object-cover"
+          className="w-full h-40 object-cover"
         />
         <div className="absolute top-4 left-4 px-3 py-1 bg-blue-600 text-white rounded-full text-sm">
-          Top
+          {tag}
         </div>
       </div>
       <div className="p-5">
@@ -179,7 +180,10 @@ export const PremiumHorizontalCard: React.FC<{ service: ServiceData }> = ({
   service,
 }) => (
   <div className="bg-gradient-to-r from-gray-900 to-gray-800 text-white rounded-xl shadow-xl flex overflow-hidden">
-    <div onClick={() => recordInteraction(service._id, "view")} className="w-2/5 relative">
+    <div
+      onClick={() => recordInteraction(service._id, "view")}
+      className="w-2/5 relative"
+    >
       <img
         src={
           service.image[0] ||
@@ -252,10 +256,9 @@ export const ImageRating: React.FC<{ service: ImageRatingData }> = ({
     <div
       className="flex flex-col items-center cursor-pointer"
       onClick={() => {
-        recordInteraction(service._id, "view")
-        navigate(`${service._id}/${generateSlug(service.title)}`)
+        recordInteraction(service._id, "view");
+        navigate(`${service._id}/${generateSlug(service.title)}`);
       }}
-
     >
       <div className="w-[120px] sm:w-[150px] md:w-[180px] h-auto group">
         <div className="relative">

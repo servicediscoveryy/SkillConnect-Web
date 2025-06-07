@@ -233,6 +233,7 @@ const Cart = () => {
   const fetchCartData = async () => {
     setLoading(true);
     const response = await api.get("/cart", { withCredentials: true });
+
     setCartData(response.data);
     setLoading(false);
   };
@@ -407,7 +408,9 @@ const Cart = () => {
 
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-lg font-semibold text-gray-800">Subtotal</span>
+            <span className="text-lg font-semibold text-gray-800">
+              Subtotal
+            </span>
             <span className="text-lg font-medium text-gray-800">
               ₹{cartData?.totalAmount}
             </span>
@@ -415,18 +418,19 @@ const Cart = () => {
           <button
             className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition-colors"
             onClick={() => {
-              const serviceIds = cartData?.cart?.flatMap(cartGroup =>
-                cartGroup.items.map(item => item.serviceId._id)
-              ) || [];
+              const serviceIds =
+                cartData?.cart?.flatMap((cartGroup) =>
+                  cartGroup.items.map((item) => item.serviceId._id)
+                ) || [];
 
               handleCheckOutSingleService(serviceIds, selectedAddress);
             }}
           >
-          Proceed to Checkout
-        </button>
+            Proceed to Checkout
+          </button>
+        </div>
       </div>
     </div>
-    </div >
   );
 };
 

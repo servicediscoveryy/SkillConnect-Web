@@ -164,7 +164,7 @@ const Filters = ({
               <div className="flex items-center gap-2">
                 <input
                   type="number"
-                  className="w-24 p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  className="w-20 p-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
                   value={filters.priceRange[0]}
                   onChange={(e) =>
                     setFilters.setPriceRange([
@@ -177,7 +177,7 @@ const Filters = ({
                 <span className="text-gray-500">to</span>
                 <input
                   type="number"
-                  className="w-24 p-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
+                  className="w-20 p-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200"
                   value={filters.priceRange[1]}
                   onChange={(e) =>
                     setFilters.setPriceRange([

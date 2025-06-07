@@ -7,12 +7,12 @@ interface CategoryProps {
 
 const Category = ({ data }: CategoryProps) => {
   return (
-    <div className="flex justify-center overflow-x-auto gap-4 p-2 hide-scrollbar bg-white my-2">
+    <div className="flex justify-center overflow-x-auto p-2 hide-scrollbar bg-white my-2 ">
       {data?.map((category: CategoryType) => (
         <Link
           to={`/category/${category?.category}`}
           key={category._id}
-          className="flex flex-col items-center text-center p-2 min-w-[100px] cursor-pointer hover:scale-105 transition-transform"
+          className="flex flex-col items-center text-center p-2  min-w-[100px] cursor-pointer hover:scale-105 transition-transform "
         >
           <img
             src={
