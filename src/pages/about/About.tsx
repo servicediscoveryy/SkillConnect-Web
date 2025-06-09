@@ -10,40 +10,8 @@ import RelatedServiceCard from "../../components/About/RelatedServiceCard";
 import ImageCarousel from "../../components/About/ImageCarousel";
 import StarRating from "../../components/About/StarRating";
 import ReviewCard from "../../components/About/ReviewCard";
-
-function AddToCartButton() {
-  const { user } = useAuth();
-  const [isAdded, setIsAdded] = useState(false);
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    if (!user) {
-      navigate("/login");
-    }
-
-    setIsAdded(true);
-    setTimeout(() => setIsAdded(false), 1500);
-  };
-
-  return (
-    <button
-      onClick={handleClick}
-      disabled={isAdded}
-      className={`flex items-center justify-center gap-2 w-full md:w-auto px-6 py-3 text-white font-medium rounded-lg transition-all duration-300 transform ${
-        isAdded
-          ? "bg-green-500 scale-95"
-          : "bg-indigo-600 hover:bg-indigo-700 hover:scale-105"
-      }`}
-    >
-      <ShoppingCart
-        className={`w-5 h-5 transition-transform duration-300 ${
-          isAdded ? "scale-110" : ""
-        }`}
-      />
-      <span>{isAdded ? "Added to Cart!" : "Add to Cart"}</span>
-    </button>
-  );
-}
+import RelatedAssociate from "../../components/About/RelatedAssociate";
+import AddToCartButton from "../../components/AddToCartButton";
 
 function About() {
   const { id } = useParams();
@@ -128,15 +96,16 @@ function About() {
                     </div>
                     <div className="flex items-center gap-2">
                       <Eye className="w-5 h-5 text-indigo-500" />
-                      <span>{serviceData.view} views</span>
+                      <span>{serviceData?.view} views</span>
                     </div>
+
                     <div className="flex items-center gap-2">
                       <StarRating
-                        rating={serviceData.ratingAvg[0].avgRating}
+                        rating={serviceData?.ratingAvg[0]?.avgRating || 0}
                         showNumber
                       />
                       <span className="text-sm">
-                        ({serviceData.ratingAvg[0].totalRating} reviews)
+                        ({serviceData?.ratingAvg[0]?.totalRating} reviews)
                       </span>
                     </div>
                   </div>
@@ -150,7 +119,7 @@ function About() {
                 <div className="text-gray-600 font-medium">per service</div>
               </div>
 
-              <AddToCartButton />
+              <AddToCartButton serviceId={serviceData?._id} />
 
               {/* Provider Info */}
               <div className="bg-gray-50 rounded-xl p-6 mt-8">
@@ -213,6 +182,8 @@ function About() {
             </div>
           </div>
         </div>
+
+        <RelatedAssociate service={serviceData} />
 
         {/* review*/}
         {serviceData.ratings.length > 0 && (

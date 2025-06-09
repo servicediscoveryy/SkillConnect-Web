@@ -42,8 +42,6 @@ const Home = () => {
     return <CircularLoader />;
   }
 
-
-  console.log(user)
   return (
     <div className="">
       <Category data={categoryData} />

@@ -1,5 +1,8 @@
 import { Star, ShoppingCart } from "lucide-react";
 import { ServiceData } from "../../constant/types";
+import AddToCartButton from "../AddToCartButton";
+import { generateSlug } from "../../utils/slug";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface RelatedServiceCardProps {
   service: ServiceData;
@@ -10,11 +13,11 @@ export default function RelatedServiceCard({
   service,
   onClick,
 }: RelatedServiceCardProps) {
-  console.log(service);
+  const navigate = useNavigate();
   return (
     <div
       className="bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 cursor-pointer group min-w-[280px]"
-      onClick={onClick}
+      onClick={() => navigate(`/${service._id}/${generateSlug(service.title)}`)}
     >
       <div className="relative overflow-hidden">
         <img
@@ -49,8 +52,7 @@ export default function RelatedServiceCard({
         </div>
 
         <button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2.5 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2 group/btn">
-          <ShoppingCart className="w-4 h-4 transition-transform duration-200 group-hover/btn:scale-110" />
-          <span>Add to Cart</span>
+          <AddToCartButton serviceId={service?._id} />
         </button>
       </div>
     </div>
