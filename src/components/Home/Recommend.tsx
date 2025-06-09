@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { FeatureVerticalCard } from "../Cards/ServiceCards";
 import { ServiceData } from "../../constant/types";
 import api from "../../requests/axiosConfig/api";

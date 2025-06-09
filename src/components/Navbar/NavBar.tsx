@@ -87,8 +87,9 @@ const NavBar: React.FC = () => {
             results={searchResult}
             isMobile
           />
-          <Location />
         </div>
+
+        <Location />
 
         {/* Mobile Menu */}
         <MobileMenu
