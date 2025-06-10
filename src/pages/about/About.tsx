@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { Star, MapPin, Eye, ShoppingCart, Award, User } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Star, MapPin, Eye, Award, User } from "lucide-react";
+import { useParams } from "react-router-dom";
 import { useFetch } from "../../hooks/useFetch";
-import { CategoryType, ServiceData, ServiceDetail } from "../../constant/types";
+import { CategoryType, ServiceDetail } from "../../constant/types";
 import CircularLoader from "../../components/CircularLoader";
-import { useAuth } from "../../context/user.context";
 import api from "../../requests/axiosConfig/api";
 import RelatedServiceCard from "../../components/About/RelatedServiceCard";
 import ImageCarousel from "../../components/About/ImageCarousel";
@@ -12,15 +11,23 @@ import StarRating from "../../components/About/StarRating";
 import ReviewCard from "../../components/About/ReviewCard";
 import RelatedAssociate from "../../components/About/RelatedAssociate";
 import AddToCartButton from "../../components/AddToCartButton";
+import toast from "react-hot-toast";
+import ReviewModal from "../../components/About/ReviewModal";
+import { useAuth } from "../../context/user.context";
 
 function About() {
   const { id } = useParams();
 
   const [relatedItems, setReletedItems] = useState([]);
 
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+
   const { response: serviceData, loading } = useFetch<ServiceDetail>(
     `/services/${id}`
   );
+
+  const { user } = useAuth();
+
   useEffect(() => {
     if (!serviceData?.category) return;
 
@@ -62,6 +69,26 @@ function About() {
       </div>
     );
   }
+
+  const handleReviewSubmit = async (rating: number, comment: string) => {
+    try {
+      console.log(rating, comment);
+      await api.post(
+        `/provider-services/rating/${serviceData._id}`,
+        {
+          rating,
+          description: comment,
+        },
+        { withCredentials: true }
+      );
+
+      toast.success("Review submitted!");
+      // Optional: Refetch service details or append new review to UI
+    } catch (error) {
+      console.error("Failed to submit review:", error);
+      toast.error("Something went wrong.");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -186,46 +213,56 @@ function About() {
         <RelatedAssociate service={serviceData} />
 
         {/* review*/}
-        {serviceData.ratings.length > 0 && (
-          <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-12">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-2">
-                  Customer Reviews
-                </h2>
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <StarRating
-                      rating={serviceData.ratingAvg[0].avgRating}
-                      size="lg"
-                    />
-                    <span className="text-2xl font-bold text-gray-900">
-                      {serviceData.ratingAvg[0].avgRating.toFixed(1)}
-                    </span>
-                  </div>
-                  <span className="text-gray-600">
-                    Based on {serviceData.ratingAvg[0].totalRating} reviews
+
+        <div className="bg-white rounded-2xl shadow-xl p-8 lg:p-12">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+                Customer Reviews
+              </h2>
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <StarRating
+                    rating={serviceData?.ratingAvg[0]?.avgRating || 0}
+                    size="lg"
+                  />
+                  <span className="text-2xl font-bold text-gray-900">
+                    {serviceData?.ratingAvg[0]?.avgRating?.toFixed(1) || 0}
                   </span>
                 </div>
+                <span className="text-gray-600">
+                  Based on {serviceData?.ratingAvg[0]?.totalRating || 0} reviews
+                </span>
               </div>
-              <button className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200">
+            </div>
+            {user?.email && (
+              <button
+                onClick={() => setIsReviewModalOpen(true)}
+                className="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg font-medium transition-colors duration-200"
+              >
                 Write a Review
               </button>
-            </div>
-
-            <div className="grid gap-6">
-              {serviceData.ratings.map((review) => (
-                <ReviewCard key={review._id} review={review} />
-              ))}
-            </div>
-
-            <div className="text-center mt-8">
-              <button className="border border-gray-300 hover:border-indigo-300 text-gray-700 hover:text-indigo-600 px-8 py-3 rounded-lg font-medium transition-all duration-200">
-                Load More Reviews
-              </button>
-            </div>
+            )}
           </div>
-        )}
+
+          <div className="grid gap-6">
+            {serviceData?.ratings?.map((review) => (
+              <ReviewCard key={review._id} review={review} />
+            ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <button className="border border-gray-300 hover:border-indigo-300 text-gray-700 hover:text-indigo-600 px-8 py-3 rounded-lg font-medium transition-all duration-200">
+              Load More Reviews
+            </button>
+          </div>
+        </div>
+
+        <ReviewModal
+          isOpen={isReviewModalOpen}
+          onClose={() => setIsReviewModalOpen(false)}
+          onSubmit={handleReviewSubmit}
+        />
       </div>
     </div>
   );
