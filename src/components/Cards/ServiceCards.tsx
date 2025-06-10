@@ -91,18 +91,18 @@ export const FeatureVerticalCard: React.FC<{
   return (
     <div
       className="bg-white rounded-xl shadow-md overflow-hidden min-w-xs cursor-pointer"
-      onClick={() => navigate(`${service._id}/${generateSlug(service.title)}`)}
+      onClick={() => navigate(`${service?._id}/${generateSlug(service.title)}`)}
     >
       <div
         className="relative"
-        onClick={() => recordInteraction(service._id, "view")}
+        onClick={() => recordInteraction(service?._id, "view")}
       >
         <img
           src={
-            service.image[0] ||
+            service?.image[0] ||
             "https://images.unsplash.com/photo-1606761568499-6d2451b23c66?w=800"
           }
-          alt={service.title}
+          alt={service?.title}
           className="w-full h-40 object-cover"
         />
         <div className="absolute top-4 left-4 px-3 py-1 bg-blue-600 text-white rounded-full text-sm">
@@ -113,23 +113,23 @@ export const FeatureVerticalCard: React.FC<{
         <div className="flex items-center gap-2 mb-3">
           <CheckCircle className="text-green-500" size={18} />
           <span className="text font-semibold">
-            {service.category.category}
+            {service?.category?.category}
           </span>
         </div>
         <h3 className=" subTitle font-bold mb-2">{service.title}</h3>
         <p className="text text-gray-600 mb-4 line-clamp-2">
-          {service.description}
+          {service?.description}
         </p>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1 text">
               <Star className="text-yellow-400" size={16} fill="currentColor" />
-              <span>{service.avgRating || "New"}</span>
+              <span>{service?.avgRating || "New"}</span>
             </div>
             <div className="flex items-center gap-1">
               <MessageCircle size={16} className="text text-gray-400" />
               <span className="text text-gray-600">
-                {service.ratingCount} reviews
+                {service?.ratingCount} reviews
               </span>
             </div>
           </div>
@@ -137,9 +137,9 @@ export const FeatureVerticalCard: React.FC<{
         <div className="flex items-center justify-between">
           <div>
             <span className="text text-gray-500">Starting from</span>
-            <div className="subTitle">₹{service.price}</div>
+            <div className="subTitle">₹{service?.price}</div>
           </div>
-          <BookNowButton serviceId={service._id} />
+          <BookNowButton serviceId={service?._id} />
         </div>
       </div>
     </div>

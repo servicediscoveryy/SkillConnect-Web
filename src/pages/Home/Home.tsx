@@ -14,9 +14,12 @@ import {
 } from "../../constant/types";
 import Recommend from "../../components/Home/Recommend";
 import { useAuth } from "../../context/user.context";
+import { useLocationContext } from "../../context/useLocationContext";
 
 const Home = () => {
   const { user } = useAuth();
+  const { location } = useLocationContext();
+  console.log(location);
   const { data: categoryData, loading: categoryLoading } =
     useFetchData<CategoryType[]>("/category");
 
@@ -25,7 +28,7 @@ const Home = () => {
 
   const { data: popularAreas, loading: popularAreasLoading } = useFetchData<
     ImageRatingData[]
-  >("/services/top?location=mumbai");
+  >(`/services/top?location=${"Pune"}`);
 
   const { data: categoryWiseServices, loading: categoryWiseServicesLoading } =
     useFetchData<CategoryWiseServicesProps[]>(
@@ -48,7 +51,7 @@ const Home = () => {
       <Banner />
       {user?.email && <Recommend />}
       <TopServices data={topServices} />
-      <PopularArea data={popularAreas} />
+      {popularAreas.length > 0 && <PopularArea data={popularAreas} />}
       {/* @ts-expect-error */}
       <CategoryWiseServices data={categoryWiseServices} />
     </div>

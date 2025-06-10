@@ -28,16 +28,16 @@ const Recommend = () => {
     return <CircularLoader />;
   }
 
+  if (data.length <= 0) {
+    return;
+  }
+
   return (
     <div>
       <div className="text-center title"> Recommended For You</div>
       <div className="flex gap-4 overflow-x-scroll hide-scrollbar my-3 p-4 bg-white">
         {data.map((service, index) => (
-          <FeatureVerticalCard
-            service={service}
-            key={index}
-            tag="For You"
-          />
+          <FeatureVerticalCard service={service} key={index} tag="For You" />
         ))}
       </div>
     </div>
