@@ -46,13 +46,11 @@ const Home = () => {
     <div className="">
       <Category data={categoryData} />
       <Banner />
-
       {user?.email && <Recommend />}
       <TopServices data={topServices} />
       <PopularArea data={popularAreas} />
       {/* @ts-expect-error */}
       <CategoryWiseServices data={categoryWiseServices} />
-      <ServicesList />
     </div>
   );
 };

@@ -54,12 +54,11 @@ const BuyTogether: React.FC<BuyTogetherProps> = ({
   const renderServiceCard = (service: ServiceDetail, isPrimary = false) => (
     <div
       key={service._id}
-      className={`relative bg-white cursor-pointer rounded-2xl shadow-sm border flex-1 transition-all duration-300 ${
+      className={`relative bg-white  rounded-2xl shadow-sm border flex-1 transition-all duration-300 ${
         isServiceSelected(service._id)
           ? "border-blue-500 shadow-lg"
           : "border-gray-200 hover:shadow-md"
       }`}
-      onClick={() => navigate(`/${service._id}/${generateSlug(service.title)}`)}
     >
       <div className="absolute top-3 right-3 z-10">
         <button
@@ -91,7 +90,12 @@ const BuyTogether: React.FC<BuyTogetherProps> = ({
           )}
         </div>
 
-        <div className="space-y-3">
+        <div
+          className="space-y-3 cursor-pointer "
+          onClick={() =>
+            navigate(`/${service._id}/${generateSlug(service.title)}`)
+          }
+        >
           <h3 className="font-bold text-lg text-gray-900 line-clamp-2">
             {service.title}
           </h3>

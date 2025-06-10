@@ -14,11 +14,17 @@ import AddToCartButton from "../../components/AddToCartButton";
 import toast from "react-hot-toast";
 import ReviewModal from "../../components/About/ReviewModal";
 import { useAuth } from "../../context/user.context";
+import { useLocationContext } from "../../context/useLocationContext";
 
 function About() {
   const { id } = useParams();
+  const { location } = useLocationContext();
 
   const [relatedItems, setReletedItems] = useState([]);
+
+  const [nearServices, setNearServices] = useState([]);
+
+  const [nearLoading, setNearLoading] = useState(false);
 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
@@ -28,15 +34,16 @@ function About() {
 
   const { user } = useAuth();
 
+  console.log(location);
+
   useEffect(() => {
     if (!serviceData?.category) return;
 
     const fetchRelatedItems = async () => {
       try {
+        setNearLoading(true);
         // 1. Get all categories
         const { data: categories } = await api.get<CategoryType[]>("/category");
-
-        console.log(categories);
 
         // 2. Find category name using the category ID
         const selectedCategory = categories.find(
@@ -48,18 +55,35 @@ function About() {
 
         const categoryName = selectedCategory.category;
 
-        // 3. Fetch related services using the category name
         const response = await api.get(`/services?category=${categoryName}`);
 
         setReletedItems(response.data);
-        // 4. Set related items
         console.log(response);
       } catch (error) {
         console.error("Error fetching related items:", error);
       }
     };
 
-    fetchRelatedItems();
+    async function fetchNearServices() {
+      try {
+        const response = await api.get(
+          `/recommend/near-services?longitude=${
+            location?.lon || 73.8562
+          }&latitude=${location?.lat || 18.4963}`,
+          {
+            params: { categoryId: serviceData?.category },
+          }
+        );
+        console.log(response);
+        setNearServices(response.data);
+
+        setNearLoading(false);
+      } catch (error) {
+        console.error("Error fetching near items:", error);
+      }
+    }
+
+    fetchRelatedItems().then(() => fetchNearServices());
   }, [serviceData?.category]);
 
   if (loading || !serviceData) {
@@ -72,7 +96,6 @@ function About() {
 
   const handleReviewSubmit = async (rating: number, comment: string) => {
     try {
-      console.log(rating, comment);
       await api.post(
         `/provider-services/rating/${serviceData._id}`,
         {
@@ -196,19 +219,33 @@ function About() {
         </div>
 
         {/* Related Items Sidebar */}
-        <div className="">
-          <div className="sticky top-8">
+        {relatedItems.length > 0 && (
+          <div className="mb-10">
             <h2 className="text-xl font-bold text-gray-900 mb-4">
               Related Services
             </h2>
-            <div className="space-y-4 flex gap-3 overflow-x-scroll overflow-y-hidden ">
+            <div className="flex gap-3 overflow-x-scroll">
               {relatedItems.map((item) => (
                 // @ts-expect-error
                 <RelatedServiceCard key={item._id} service={item} />
               ))}
             </div>
           </div>
-        </div>
+        )}
+
+        {nearServices.length > 0 && (
+          <div className="my-10">
+            <h2 className="text-xl font-bold text-gray-900 mb-4">
+              Services Near To You
+            </h2>
+            <div className="flex gap-3 overflow-x-scroll">
+              {nearServices.map((item) => (
+                // @ts-expect-error
+                <RelatedServiceCard key={item._id} service={item} />
+              ))}
+            </div>
+          </div>
+        )}
 
         <RelatedAssociate service={serviceData} />
 

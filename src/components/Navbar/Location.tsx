@@ -1,76 +1,36 @@
+// src/components/LocationDisplay.tsx
 import { MapPin } from "lucide-react";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
+import { useLocationContext } from "../../context/useLocationContext";
 
-const Location: React.FC = () => {
-  const [location, setLocation] = useState("Fetching location...");
-  const [coordinates, setCoordinates] = useState<{
-    lat: number;
-    lon: number;
-  } | null>(null);
+const LocationDisplay: React.FC = () => {
+  const { location, fetchLocation, isFetching } = useLocationContext();
 
-  const fetchAddress = async (lat: number, lon: number) => {
-    try {
-      const res = await axios.get(
-        "https://nominatim.openstreetmap.org/reverse",
-        {
-          params: {
-            format: "jsonv2",
-            lat,
-            lon,
-          },
-          headers: {
-            "User-Agent": "serviceDiscovery (tusharshitole6767@email.com)",
-          },
-        }
-      );
+  // If you want a “refresh” icon/button to re-fetch location:
+  // <MapPin onClick={() => fetchLocation()} ... />
 
-      const address = res.data.display_name;
-      setLocation(address);
-      setCoordinates({ lat, lon });
-    } catch (error) {
-      setLocation("Unable to fetch address");
-      console.error("Reverse geocoding error:", error);
-    }
-  };
-
-  const updateLocation = () => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          fetchAddress(latitude, longitude);
-        },
-        () => {
-          console.warn("Location access denied. Falling back to Pune.");
-          fetchAddress(18.5204, 73.8567);
-        }
-      );
-    } else {
-      console.warn("Geolocation not supported. Using Pune as default.");
-      fetchAddress(18.5204, 73.8567);
-    }
-  };
-
-  useEffect(() => {
-    updateLocation(); // initial fetch
-  }, []);
+  let displayText = "Fetching location...";
+  if (location) {
+    // You might only show the last few segments as in your original:
+    const parts = location.address.split(",");
+    const lastSegments = parts.slice(-4).join(","); // adjust count as desired
+    displayText = lastSegments;
+  }
 
   return (
     <div className="text-xs text-gray-600 flex items-center mt-2">
       <MapPin
         className="w-4 h-4 mr-1 text-[#2874f0] cursor-pointer"
-        onClick={updateLocation}
-        // title="Click to refresh location"
+        onClick={() => fetchLocation()}
       />
-      {location.split(",").splice(-4).join(",")}
-      {coordinates && (
+      {isFetching ? "Updating..." : displayText}
+      {location && !isFetching && (
         <div className="ml-2 text-[10px] text-gray-400">
-          ({coordinates.lat.toFixed(2)}, {coordinates.lon.toFixed(2)})
+          ({location.lat.toFixed(2)}, {location.lon.toFixed(2)})
         </div>
       )}
     </div>
   );
 };
 
-export default Location;
+export default LocationDisplay;
