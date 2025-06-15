@@ -1,4 +1,3 @@
-import ServicesList from "../../components/Home/ServicesCard";
 import CategoryWiseServices from "../../components/Home/CategoryWiseServices";
 import PopularArea from "../../components/Home/PopularArea";
 import Category from "../../components/Home/Category";

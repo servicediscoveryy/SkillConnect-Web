@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../../requests/axiosConfig/api";
-import { ServiceData, ServiceDetail } from "../../constant/types";
+import {  ServiceDetail } from "../../constant/types";
 import BuyTogether from "./BuyTogether";
 
 const RelatedAssociate = ({ service }: { service: ServiceDetail }) => {
   const [associatedService, setAssociatedService] =
     useState<ServiceDetail | null>(null);
+    //@ts-expect-error
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {

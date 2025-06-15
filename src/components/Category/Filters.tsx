@@ -40,7 +40,6 @@ const Filters = ({
   filters,
   setFilters,
   options,
-  initialState,
   clearFilters,
   hasActiveFilters,
 }: FiltersProps) => {

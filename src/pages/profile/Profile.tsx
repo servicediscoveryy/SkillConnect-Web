@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { User, MapPin, ShoppingBag, ChevronRight, Camera } from "lucide-react";
+import { useEffect, useState } from "react";
+import { User, MapPin, ShoppingBag, ChevronRight } from "lucide-react";
 import { ProfileSection } from "../../components/Profile/ProfileSection";
 import { AddressSection } from "../../components/Profile/AddressSection";
 import { OrdersSection } from "../../components/Profile/OrderSection";

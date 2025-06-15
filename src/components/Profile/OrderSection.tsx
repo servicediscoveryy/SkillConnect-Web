@@ -59,7 +59,7 @@ export const OrdersSection: React.FC = () => {
 
   const handleCancel = async (orderId: string) => {
     try {
-      const response = await api.patch(
+      await api.patch(
         `/booking/cancel/${orderId}`,
         {},
         {

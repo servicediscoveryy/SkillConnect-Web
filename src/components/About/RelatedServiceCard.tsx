@@ -1,8 +1,8 @@
-import { Star, ShoppingCart } from "lucide-react";
+import { Star } from "lucide-react";
 import { ServiceData } from "../../constant/types";
 import AddToCartButton from "../AddToCartButton";
 import { generateSlug } from "../../utils/slug";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 interface RelatedServiceCardProps {
   service: ServiceData;
@@ -11,6 +11,7 @@ interface RelatedServiceCardProps {
 
 export default function RelatedServiceCard({
   service,
+  //@ts-expect-error
   onClick,
 }: RelatedServiceCardProps) {
   const navigate = useNavigate();

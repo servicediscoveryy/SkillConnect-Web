@@ -24,6 +24,7 @@ function About() {
 
   const [nearServices, setNearServices] = useState([]);
 
+  //@ts-expect-error
   const [nearLoading, setNearLoading] = useState(false);
 
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);

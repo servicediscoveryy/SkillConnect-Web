@@ -20,7 +20,9 @@ export const handleCheckOutSingleService = async (
       { withCredentials: true }
     );
     console.log(order);
+    //@ts-expect-error
     const orderData = order?.order;
+    //@ts-expect-error
     const keyId = order?.keyId;
 
     if (!window.Razorpay) {
@@ -42,6 +44,8 @@ export const handleCheckOutSingleService = async (
       name: "GSM",
       description: "Payment for course",
       order_id: orderData.id,
+
+      //@ts-expect-error
       handler: function (response: any) {
         setTimeout(() => {
           toast.success("Payment successful");

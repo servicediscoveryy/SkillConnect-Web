@@ -7,7 +7,7 @@ import { SyncLoader } from "react-spinners";
 import { recordInteraction } from "../hooks/IncrementCount";
 
 const BookNowButton = ({ serviceId }: { serviceId: string }) => {
-  const { user, fetchCartCount } = useAuth();
+  const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const addToCart = async (e: React.MouseEvent) => {
