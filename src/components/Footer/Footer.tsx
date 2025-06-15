@@ -43,7 +43,7 @@ const Footer = () => {
           {/** Partners Section **/}
           <FooterColumn
             title="For partners"
-            links={[{ text: "Register as a professional", href: "#" }]}
+            links={[{ text: "Register as a professional", href: "https://providerfrontend.onrender.com" }]}
           />
 
           {/** Social Links Section **/}

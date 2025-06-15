@@ -90,7 +90,7 @@ const DesktopNav: React.FC<DesktopNavProps> = ({
         </div>
       )}
 
-      <a href="/seller" className="text-sm font-medium hover:text-blue-600">
+      <a href="https://providerfrontend.onrender.com" className="text-sm font-medium hover:text-blue-600">
         Register As Provider
       </a>
 
