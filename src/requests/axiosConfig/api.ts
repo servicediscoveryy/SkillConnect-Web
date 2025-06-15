@@ -1,6 +1,8 @@
 import axios from "axios";
 import { BASEURL } from "../../constant";
 
+axios.defaults.withCredentials = true;
+
 const api = axios.create({
   baseURL: `${BASEURL}/api/v1`,
   timeout: 50000,
